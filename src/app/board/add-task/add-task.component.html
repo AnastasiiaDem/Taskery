@@ -1,0 +1,31 @@
+<div class="add-task">
+  <p>Add New Task</p><br>
+  <form style="display: flex; flex-direction: column; align-items: center;" [formGroup]="taskForm"
+        (ngSubmit)="addTask()">
+    <table>
+      <tr>
+        <th>Title</th>
+        <th>Employee</th>
+        <th>Duration</th>
+      </tr>
+      <tr>
+        <td>
+          <input type="text" formControlName="title">
+        </td>
+        <td>
+          <select formControlName="selectedUserId">
+            <option *ngFor="let user of users" [value]="user.id">{{user.text}}</option>
+          </select>
+        </td>
+        <td>
+          <input type="number" formControlName="duration">
+        </td>
+        <td>
+          <button style="float: right;" type="submit" [disabled]="!taskForm.valid">
+            Add Task
+          </button>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
