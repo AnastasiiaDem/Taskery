@@ -17,6 +17,7 @@ import {BoardComponent} from './board/board.component';
 import {AddTaskComponent} from './board/add-task/add-task.component';
 import {AuthenticationService} from './shared/services/authentication.service';
 import {AlertService} from './shared/services/alert.service';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 @NgModule({
     declarations: [
@@ -35,7 +36,8 @@ import {AlertService} from './shared/services/alert.service';
         AppRoutingModule,
         BrowserAnimationsModule,
         ReactiveFormsModule,
-        ToastrModule.forRoot()
+        ToastrModule.forRoot(),
+        DragDropModule
     ],
     providers: [HttpClientModule, TaskService, UserService, AlertService, AuthenticationService,
         {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}

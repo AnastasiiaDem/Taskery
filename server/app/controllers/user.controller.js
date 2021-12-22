@@ -155,20 +155,20 @@ exports.register = (req, res) => {
                     message:
                         'Username "' + user.email + '" is already registered'
                 });
-            }
-
-            user.id = users.length ? Math.max(...users.map(x => x.id)) + 1 : 1;
-            users.push(user);
-            User.create(user)
-                .then(data => {
-                    res.send(data);
-                })
-                .catch(err => {
-                    res.status(500).send({
-                        message:
-                            err.message || "Some error occurred while creating the User."
+            } else {
+                user.id = users.length ? Math.max(...users.map(x => x.id)) + 1 : 1;
+                users.push(user);
+                User.create(user)
+                    .then(data => {
+                        res.send(data);
+                    })
+                    .catch(err => {
+                        res.status(500).send({
+                            message:
+                                err.message || "Some error occurred while creating the User."
+                        });
                     });
-                });
+            }
         })
         .catch(err => {
             res.status(500).send({

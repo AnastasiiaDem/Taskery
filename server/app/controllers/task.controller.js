@@ -1,4 +1,5 @@
 const db = require("../models");
+const {log} = require("util");
 const Task = db.task;
 const Op = db.Sequelize.Op;
 
@@ -68,13 +69,13 @@ exports.findOne = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  const id = req.params.id;
+  const id = req.body.id;
 
   Task.update(req.body, {
     where: {id: id}
   })
     .then(num => {
-      if (num === 1) {
+      if (num == 1) {
         res.send({
           message: "Task was updated successfully."
         });
