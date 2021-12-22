@@ -60,7 +60,13 @@ export class TaskListComponent implements OnInit {
             } else {
                 event.item.data.status = 'done';
             }
-            this.taskService.updateTask(event.item.data);
+            this.taskService.updateTask(event.item.data)
+                .subscribe(data => {
+                        console.log(data.message);
+                    },
+                    err => {
+                        console.log(err);
+                    });
         }
     }
 }

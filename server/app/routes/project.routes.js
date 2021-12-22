@@ -4,7 +4,6 @@ module.exports = app => {
   const router = require("express").Router();
 
   router.post("/", project.create);
-
   router.get("/", project.findAll);
   router.get("/:id", project.findOne);
   router.put("/:id", project.update);

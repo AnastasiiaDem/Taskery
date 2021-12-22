@@ -17,8 +17,6 @@ db.sequelize = sequelize;
 
 const allModels = require("./model.js")(sequelize, Sequelize);
 
-db.position = allModels.Position;
-db.status = allModels.Status;
 db.user = allModels.User;
 db.task = allModels.Task;
 db.project = allModels.Project;

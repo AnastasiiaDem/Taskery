@@ -1,10 +1,8 @@
 const db = require("../models");
-const {log} = require("util");
 const Task = db.task;
 const Op = db.Sequelize.Op;
 
 exports.create = (req, res) => {
-  console.log(req.body)
   if (!req.body.title) {
     res.status(400).send({
       message: "Content can not be empty!"
