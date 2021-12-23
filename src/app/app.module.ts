@@ -12,9 +12,7 @@ import {LoginComponent} from './auth/login/login.component';
 import {RegisterComponent} from './auth/register/register.component';
 import {ErrorInterceptor} from './shared/services/error.interceptor';
 import {ToastrModule} from 'ngx-toastr';
-import {TaskListComponent} from './board/task-list/task-list.component';
 import {BoardComponent} from './board/board.component';
-import {AddTaskComponent} from './board/add-task/add-task.component';
 import {AuthenticationService} from './shared/services/authentication.service';
 import {AlertService} from './shared/services/alert.service';
 import {DragDropModule} from '@angular/cdk/drag-drop';
@@ -24,15 +22,17 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatListModule} from '@angular/material/list';
+import { HomeComponent } from './home/home.component';
+import { TeamComponent } from './team/team.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         LoginComponent,
         RegisterComponent,
-        TaskListComponent,
         BoardComponent,
-        AddTaskComponent,
+        HomeComponent,
+        TeamComponent,
     ],
     imports: [
         BrowserModule,

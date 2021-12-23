@@ -2,6 +2,9 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {AlertService} from './shared/services/alert.service';
 import {ToastrService} from 'ngx-toastr';
+import {UserModel} from './shared/models/user.model';
+import {Router} from '@angular/router';
+import {AuthenticationService} from './shared/services/authentication.service';
 
 @Component({
     selector: 'app-root',
@@ -12,9 +15,13 @@ export class AppComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
     messageText: string;
     message: any;
+    currentUser: UserModel;
 
     constructor(private alertService: AlertService,
-                private toastr: ToastrService) {
+                private toastr: ToastrService,
+                private router: Router,
+                private authenticationService: AuthenticationService) {
+        this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
     }
 
     ngOnInit() {
@@ -33,6 +40,11 @@ export class AppComponent implements OnInit, OnDestroy {
                 }
                 this.message = message;
             });
+    }
+
+    logout() {
+        this.authenticationService.logout();
+        this.router.navigate(['/login']);
     }
 
     ngOnDestroy() {

@@ -7,7 +7,7 @@
 body {
   margin: 0;
   padding: 0;
-}
+ }
 
 #loading-bar .bar {
   background: #d35400;
@@ -123,6 +123,14 @@ ng-select2 {
 
 .modal-dialog {
   max-width: 650px !important;
+}
+
+.modal-content {
+  border: 0 !important;
+}
+
+.e-dlg-target.e-scroll-disabled {
+  overflow: scroll !important;
 }
 
 @import '../node_modules/@syncfusion/ej2-base/styles/material.css';

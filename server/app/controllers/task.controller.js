@@ -1,4 +1,5 @@
 const db = require("../models");
+const {log} = require("util");
 const Task = db.task;
 const Op = db.Sequelize.Op;
 
@@ -68,7 +69,6 @@ exports.findOne = (req, res) => {
 
 exports.update = (req, res) => {
   const id = req.body.id;
-
   Task.update(req.body, {
     where: {id: id}
   })
@@ -77,7 +77,12 @@ exports.update = (req, res) => {
         res.send({
           message: "Task was updated successfully."
         });
-      } else {
+      } else if (num == 0) {
+        res.send({
+          message: "Task data was not changed."
+        });
+      }
+      else {
         res.send({
           message: `Cannot update Task with id=${id}. Maybe Task was not found or req.body is empty!`
         });
