@@ -28,6 +28,13 @@
                                 <label>Email</label>
                             </div>
                             <div class="form-floating mb-3">
+                                <ng-select2 formControlName="position"
+                                            placeholder="Position" [width]="'100%'"
+                                            [data]="positionData"
+                                            [ngClass]="{ 'is-invalid': submitted && f.position.errors }" required>
+                                </ng-select2>
+                            </div>
+                            <div class="form-floating mb-3">
                                 <input class="form-control" formControlName="password" type="password"
                                        placeholder="Password"
                                        [ngClass]="{ 'is-invalid': submitted && f.password.errors }" required>

@@ -7,16 +7,19 @@ import {UserService} from '../../shared/services/user.service';
 import {AlertService} from '../../shared/services/alert.service';
 import {UserModel} from 'src/app/shared/models/user.model';
 import {PositionEnum} from '../../shared/enums';
+import {Select2OptionData} from 'ng-select2';
 
 @Component({
     selector: 'app-register',
-    templateUrl: 'register.component.html'
+    templateUrl: 'register.component.html',
+    styleUrls: ['register.component.scss']
 })
 export class RegisterComponent implements OnInit {
     registerForm: FormGroup;
     loading = false;
     submitted = false;
     userList: UserModel[] = [];
+    positionData: Array<Select2OptionData> = [];
 
     constructor(private formBuilder: FormBuilder,
                 private router: Router,
@@ -29,10 +32,16 @@ export class RegisterComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.positionData = [
+            {id: PositionEnum.programmer, text: PositionEnum.programmer},
+            {id: PositionEnum.designer, text: PositionEnum.designer},
+            {id: PositionEnum.teamLead, text: PositionEnum.teamLead}
+        ];
         this.registerForm = this.formBuilder.group({
             firstName: ['', Validators.required],
             lastName: ['', Validators.required],
             email: ['', Validators.required],
+            position: ['', Validators.required],
             password: ['', [Validators.required, Validators.minLength(6)]],
             agree: ['', Validators.required]
         });
@@ -61,7 +70,7 @@ export class RegisterComponent implements OnInit {
             firstName: this.registerForm.value.firstName,
             lastName: this.registerForm.value.lastName,
             password: this.registerForm.value.password,
-            position: PositionEnum.programmer
+            position: this.registerForm.value.position
         };
 
         this.loading = true;

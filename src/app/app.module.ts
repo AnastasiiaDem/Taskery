@@ -18,6 +18,12 @@ import {AddTaskComponent} from './board/add-task/add-task.component';
 import {AuthenticationService} from './shared/services/authentication.service';
 import {AlertService} from './shared/services/alert.service';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import {KanbanModule} from '@syncfusion/ej2-angular-kanban';
+import {NgSelect2Module} from 'ng-select2';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {MatListModule} from '@angular/material/list';
 
 @NgModule({
     declarations: [
@@ -26,7 +32,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
         RegisterComponent,
         TaskListComponent,
         BoardComponent,
-        AddTaskComponent
+        AddTaskComponent,
     ],
     imports: [
         BrowserModule,
@@ -37,7 +43,13 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
         BrowserAnimationsModule,
         ReactiveFormsModule,
         ToastrModule.forRoot(),
-        DragDropModule
+        DragDropModule,
+        KanbanModule,
+        NgSelect2Module,
+        NgbModule,
+        MatButtonModule,
+        MatListModule,
+        MatIconModule
     ],
     providers: [HttpClientModule, TaskService, UserService, AlertService, AuthenticationService,
         {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}

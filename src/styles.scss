@@ -91,4 +91,46 @@ body {
   }
 }
 
-/* End Spinner Loader */
+ng-select2 {
+  .select2-selection {
+    height: 56px !important;
+
+    .select2-selection__rendered {
+      line-height: 54px !important;
+    }
+
+    .select2-selection__arrow {
+      height: 54px !important;
+    }
+  }
+}
+
+.select2-container {
+  z-index: 1055;
+
+  .select2-dropdown .select2-search--dropdown {
+    display: none !important;
+  }
+}
+
+.select2-container--default .select2-selection--single {
+  border: 1px solid #CED4DA !important;
+}
+
+.e-dlg-container {
+  display: none !important;
+}
+
+.modal-dialog {
+  max-width: 650px !important;
+}
+
+@import '../node_modules/@syncfusion/ej2-base/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-buttons/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-dropdowns/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-inputs/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-layouts/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-navigations/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-popups/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-angular-kanban/styles/material.css';
+

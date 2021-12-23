@@ -1,9 +1,22 @@
-<nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="currentUser">
-  <div class="navbar-nav">
-    <a class="nav-item nav-link" routerLink="/">Home</a>
-    <a class="nav-item nav-link" (click)="logout()">Logout</a>
-  </div>
+<nav class="navbar navbar-expand" *ngIf="currentUser">
+    <div class="navbar-nav">
+        <a class="nav-item nav-link" routerLink="/">
+            <img src="./assets/images/taskery.png" alt="" width="130">
+        </a>
+        <div style="display: flex; margin-right: 5rem;">
+            <a class="nav-item nav-link project-list" routerLink="/">Home</a>
+            <a class="nav-item nav-link project-list" routerLink="/">Team</a>
+            <a class="nav-item nav-link project-list" routerLink="/">Project list</a>
+            <a class="nav-item nav-link report" routerLink="/">Report</a>
+        </div>
+        <a class="nav-item nav-link" (click)="logout()">Logout <img
+                src="https://img.icons8.com/ios-filled/15/000000/logout-rounded.png" alt=""></a>
+    </div>
 </nav>
 <div class="main-body-contents">
-  <app-task-list></app-task-list>
+    <app-task-list></app-task-list>
 </div>
+<footer class="footer">
+    <p class="site">Taskery.com</p>
+    <p> © All rights reserved.</p>
+</footer>
