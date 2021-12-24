@@ -222,9 +222,11 @@ ngb-carousel .picsum-img-wrapper>img {
 }
 
 .footer {
-  margin: 1rem;
   text-align: center;
   font-size: 13px;
+  margin: 1rem auto;
+  width: 100%;
+
   .site {
     margin-bottom: 0.5rem;
     font-size: 11px;

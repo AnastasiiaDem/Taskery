@@ -1,5 +1,4 @@
 const db = require("../models");
-const {log} = require("util");
 const Task = db.task;
 const Op = db.Sequelize.Op;
 
@@ -10,16 +9,17 @@ exports.create = (req, res) => {
     });
     return;
   }
-
+  
   const task = {
-    id: req.params.id,
+    id: req.body.id,
     title: req.body.title,
     description: req.body.description,
     status: req.body.status,
     duration: req.body.duration,
-    employeeId: req.body.employeeId
+    employeeId: req.body.employeeId,
+    projectId: req.body.projectId
   };
-
+  
   Task.create(task)
     .then(data => {
       res.send(data);
@@ -35,7 +35,7 @@ exports.create = (req, res) => {
 exports.findAll = (req, res) => {
   const title = req.query.title;
   const condition = title ? {title: {[Op.like]: `%${title}%`}} : null;
-
+  
   Task.findAll({where: condition})
     .then(data => {
       res.send(data);
@@ -70,8 +70,8 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
   const id = req.body.id;
   Task.update(req.body, {
-    where: {id: id}
-  })
+      where: {id: id}
+    })
     .then(num => {
       if (num == 1) {
         res.send({
@@ -81,8 +81,7 @@ exports.update = (req, res) => {
         res.send({
           message: "Task data was not changed."
         });
-      }
-      else {
+      } else {
         res.send({
           message: `Cannot update Task with id=${id}. Maybe Task was not found or req.body is empty!`
         });
@@ -97,10 +96,10 @@ exports.update = (req, res) => {
 
 exports.delete = (req, res) => {
   const id = req.params.id;
-
+  
   Task.destroy({
-    where: {id: id}
-  })
+      where: {id: id}
+    })
     .then(num => {
       if (num === 1) {
         res.send({

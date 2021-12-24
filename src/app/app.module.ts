@@ -23,7 +23,8 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatListModule} from '@angular/material/list';
 import { HomeComponent } from './home/home.component';
-import { TeamComponent } from './team/team.component';
+import { ProjectsComponent } from './projects/projects.component';
+import {ProjectsService} from './shared/services/project.service';
 
 @NgModule({
     declarations: [
@@ -32,7 +33,7 @@ import { TeamComponent } from './team/team.component';
         RegisterComponent,
         BoardComponent,
         HomeComponent,
-        TeamComponent,
+        ProjectsComponent
     ],
     imports: [
         BrowserModule,
@@ -51,7 +52,7 @@ import { TeamComponent } from './team/team.component';
         MatListModule,
         MatIconModule
     ],
-    providers: [HttpClientModule, TaskService, UserService, AlertService, AuthenticationService,
+    providers: [HttpClientModule, TaskService, UserService, ProjectsService, AlertService, AuthenticationService,
         {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}
     ],
     bootstrap: [AppComponent]

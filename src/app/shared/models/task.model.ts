@@ -7,4 +7,5 @@ export class TaskModel {
   status: StatusEnum;
   duration: number;
   employeeId: number;
+  projectId: number;
 }

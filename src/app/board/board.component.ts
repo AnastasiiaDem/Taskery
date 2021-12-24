@@ -16,17 +16,13 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 })
 export class BoardComponent implements OnInit, AfterViewChecked {
 
-    @ViewChild('closebutton') closebutton;
     @ViewChild('kanban') kanban;
 
     taskForm: FormGroup;
     tasks: TaskModel[] = [];
-    currentTask: TaskModel;
-    invalidDuration: boolean = false;
-    invalidTitle: boolean = false;
     cardSettings: CardSettingsModel = {
         contentField: 'description',
-        headerField: 'id'
+        headerField: 'title'
     };
     dialogSettings: DialogSettingsModel = {
         fields: [
@@ -39,6 +35,10 @@ export class BoardComponent implements OnInit, AfterViewChecked {
     addTaskFlag: boolean;
     statusData: Array<Select2OptionData> = [];
     employeeData: Array<Select2OptionData> = [];
+
+    get f() {
+        return this.taskForm.controls;
+    }
 
     constructor(private formBuilder: FormBuilder,
                 public taskService: TaskService,
@@ -54,16 +54,17 @@ export class BoardComponent implements OnInit, AfterViewChecked {
             {id: StatusEnum.onReview, text: StatusEnum.onReview},
             {id: StatusEnum.done, text: StatusEnum.done}
         ];
-        this.taskForm = this.formBuilder.group({
-            title: ['', Validators.required],
-            description: ['', Validators.required],
-            status: ['', Validators.required],
-            duration: ['', Validators.required],
-            employeeId: ['', Validators.required]
-        });
-
         this.getAllTasks();
         this.getAllUsers();
+        this.taskForm = this.formBuilder.group({
+            id: [''],
+            title: ['', Validators.required],
+            description: ['', {required: false}],
+            status: ['', Validators.required],
+            duration: ['', [Validators.required, Validators.min(1)]],
+            employeeId: ['', Validators.required],
+            projectId: ['', Validators.required],
+        });
     }
 
     ngAfterViewChecked() {
@@ -112,14 +113,16 @@ export class BoardComponent implements OnInit, AfterViewChecked {
         this.taskService.getTasks()
             .subscribe(tasks => {
                     this.tasks = tasks;
-                    this.currentTask = {
-                        id: this.tasks.length + 1,
+                    let currentTask = {
+                        id: this.tasks.length ? Math.max(...this.tasks.map(x => x.id)) + 1 : 1,
                         title: '',
                         description: '',
                         status: StatusEnum.todo,
                         duration: 0,
-                        employeeId: 1
+                        employeeId: 1,
+                        projectId: 1
                     };
+                    this.taskForm.setValue(currentTask);
                 },
                 err => {
                     console.log(err);
@@ -153,49 +156,70 @@ export class BoardComponent implements OnInit, AfterViewChecked {
 
     openModal(content, task) {
         this.addTaskFlag = false;
-        this.currentTask = task.data;
+        this.taskForm.setValue(task.data);
         this.modalService.open(content, {centered: true});
     }
 
-    closeModal(modal) {
-        if (!this.currentTask.title) {
-            this.invalidTitle = true;
-        }
-        if (!this.currentTask.duration) {
-            this.invalidDuration = true;
-        } else {
-            this.invalidDuration = false;
-            this.invalidTitle = false;
-            if (!this.addTaskFlag) {
-                this.taskService.updateTask(this.currentTask)
-                    .subscribe(data => {
-                            console.log(data.message);
-                        },
-                        err => {
-                            console.log(err);
-                        });
-                this.kanban.updateCard(this.currentTask);
-            } else {
-                this.taskService.addTask(this.currentTask)
-                    .subscribe(task => {
-                            this.tasks.push(task);
-                            this.taskForm.value.title = '';
-                            this.taskForm.value.selectedUserId = '';
-                            this.taskForm.value.description = '';
-                            this.taskForm.value.duration = '';
-                        },
-                        err => {
-                            console.log(err);
-                        });
-                this.kanban.addCard(this.currentTask);
-            }
+    onSubmit(modal) {
+        if (!this.addTaskFlag) {
+            this.taskService.updateTask(this.taskForm.value)
+                .subscribe(data => {
+                        console.log(data.message);
+                        this.kanban.updateCard(this.taskForm.value);
+                    },
+                    err => {
+                        console.log(err);
+                    });
             this.kanban.closeDialog();
-            modal.close();
+        } else {
+            this.taskService.addTask(this.taskForm.value)
+                .subscribe(task => {
+                        this.tasks.push(task);
+                        this.kanban.addCard(task);
+                    },
+                    err => {
+                        console.log(err);
+                    });
         }
+        modal.close();
     }
 
     addTask(content) {
+        let currentTask = {
+            id: this.tasks.length ? Math.max(...this.tasks.map(x => x.id)) + 1 : 1,
+            title: '',
+            description: '',
+            status: StatusEnum.todo,
+            duration: 0,
+            employeeId: 1,
+            projectId: 1
+        };
+        this.taskForm.setValue(currentTask);
         this.addTaskFlag = true;
         this.modalService.open(content, {centered: true});
+    }
+
+    deleteTask(modal) {
+        this.taskService.deleteTask(this.taskForm.value.id)
+            .subscribe(data => {
+                    console.log(data.message);
+                    this.tasks.filter(task => task.id !== this.taskForm.value.id);
+                    this.kanban.deleteCard(this.taskForm.value.id);
+                },
+                err => {
+                    console.log(err);
+                });
+
+        let currentTask = {
+            id: this.tasks.length ? Math.max(...this.tasks.map(x => x.id)) + 1 : 1,
+            title: '',
+            description: '',
+            status: StatusEnum.todo,
+            duration: 0,
+            employeeId: 1,
+            projectId: 1
+        };
+        this.taskForm.setValue(currentTask);
+        modal.close();
     }
 }
