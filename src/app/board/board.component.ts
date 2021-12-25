@@ -8,6 +8,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {UserService} from 'src/app/shared/services/user.service';
 import * as $ from 'jquery';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
     selector: 'app-board',
@@ -35,7 +36,8 @@ export class BoardComponent implements OnInit, AfterViewChecked {
     addTaskFlag: boolean;
     statusData: Array<Select2OptionData> = [];
     employeeData: Array<Select2OptionData> = [];
-
+    selectedProjectId: number;
+    
     get f() {
         return this.taskForm.controls;
     }
@@ -44,7 +46,11 @@ export class BoardComponent implements OnInit, AfterViewChecked {
                 public taskService: TaskService,
                 private modalService: NgbModal,
                 private userService: UserService,
+                private route: ActivatedRoute,
                 private elementRef: ElementRef) {
+        this.route.params.subscribe(param => {
+            this.selectedProjectId = param['paramKey'];
+        });
     }
 
     ngOnInit() {
@@ -74,32 +80,32 @@ export class BoardComponent implements OnInit, AfterViewChecked {
         });
 
         dom.querySelectorAll('.e-header-text').forEach(el => {
-            if (el.innerHTML.includes('To do')) {
+            if (el.innerHTML.includes(StatusEnum.todo)) {
                 $(el).css({'color': 'rgb(57 197 255)'});
             }
-            if (el.innerHTML.includes('In Progress')) {
+            if (el.innerHTML.includes(StatusEnum.inProgress)) {
                 $(el).css({'color': 'rgb(255 149 119)'});
             }
-            if (el.innerHTML.includes('On Review')) {
+            if (el.innerHTML.includes(StatusEnum.onReview)) {
                 $(el).css({'color': 'rgb(101 85 255)'});
             }
-            if (el.innerHTML.includes('Done')) {
+            if (el.innerHTML.includes(StatusEnum.done)) {
                 $(el).css({'color': 'rgb(58 224 104)'});
             }
             $(el).css({'font-weight': '600'});
         });
 
         dom.querySelectorAll('.e-header-cells').forEach(el => {
-            if (el.innerHTML.includes('To do')) {
+            if (el.innerHTML.includes(StatusEnum.todo)) {
                 $(el).css({'background-color': '#EDF9FF'});
             }
-            if (el.innerHTML.includes('In Progress')) {
+            if (el.innerHTML.includes(StatusEnum.inProgress)) {
                 $(el).css({'background-color': '#FFEFEA'});
             }
-            if (el.innerHTML.includes('On Review')) {
+            if (el.innerHTML.includes(StatusEnum.onReview)) {
                 $(el).css({'background-color': '#EAE8FF'});
             }
-            if (el.innerHTML.includes('Done')) {
+            if (el.innerHTML.includes(StatusEnum.done)) {
                 $(el).css({'background-color': '#E8FBED'});
             }
         });
@@ -112,15 +118,15 @@ export class BoardComponent implements OnInit, AfterViewChecked {
     getAllTasks() {
         this.taskService.getTasks()
             .subscribe(tasks => {
-                    this.tasks = tasks;
+                    this.tasks = tasks.filter(task => task.projectId == this.selectedProjectId);
                     let currentTask = {
-                        id: this.tasks.length ? Math.max(...this.tasks.map(x => x.id)) + 1 : 1,
+                        id: this.tasks.length + 1,
                         title: '',
                         description: '',
                         status: StatusEnum.todo,
                         duration: 0,
                         employeeId: 1,
-                        projectId: 1
+                        projectId: Number(this.selectedProjectId)
                     };
                     this.taskForm.setValue(currentTask);
                 },
@@ -186,13 +192,13 @@ export class BoardComponent implements OnInit, AfterViewChecked {
 
     addTask(content) {
         let currentTask = {
-            id: this.tasks.length ? Math.max(...this.tasks.map(x => x.id)) + 1 : 1,
+            id: this.tasks.length + 1,
             title: '',
             description: '',
             status: StatusEnum.todo,
             duration: 0,
             employeeId: 1,
-            projectId: 1
+            projectId: Number(this.selectedProjectId)
         };
         this.taskForm.setValue(currentTask);
         this.addTaskFlag = true;
@@ -211,13 +217,13 @@ export class BoardComponent implements OnInit, AfterViewChecked {
                 });
 
         let currentTask = {
-            id: this.tasks.length ? Math.max(...this.tasks.map(x => x.id)) + 1 : 1,
+            id: this.tasks.length + 1,
             title: '',
             description: '',
             status: StatusEnum.todo,
             duration: 0,
             employeeId: 1,
-            projectId: 1
+            projectId: Number(this.selectedProjectId)
         };
         this.taskForm.setValue(currentTask);
         modal.close();

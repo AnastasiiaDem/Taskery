@@ -10,7 +10,7 @@
             (dialogOpen)='openModal(content, $event)'
             (dragStop)="drop($event)">
     <e-columns>
-        <e-column headerText='To do' keyField='todo'></e-column>
+        <e-column headerText='To Do' keyField='todo'></e-column>
         <e-column headerText='In Progress' keyField='in progress'></e-column>
         <e-column headerText='On Review' keyField='on review'></e-column>
         <e-column headerText='Done' keyField='done'></e-column>
@@ -29,11 +29,7 @@
             <div class="card-body" style="padding: 2rem!important;">
                 <form [formGroup]="taskForm" (ngSubmit)="onSubmit(modal)">
                     <div style="display: flex;">
-                        <div class="form-floating mb-3">
-                            <input class="form-control" formControlName="id" type="text" disabled>
-                            <label>ID</label>
-                        </div>
-                        <div class="form-floating right-field" style="width: 100%;">
+                        <div class="form-floating right-field" style="width: 100%; margin-left: 0 !important;">
                             <input class="form-control" type="text" placeholder="Title" formControlName="title"
                                    [ngClass]="{ 'is-invalid': taskForm.invalid && f.title.errors }" required>
                             <label>Title</label>
@@ -47,7 +43,7 @@
                         <ng-select2 formControlName="employeeId" [width]="'100%'" [data]="employeeData">
                         </ng-select2>
                     </div>
-                    <div style="display: flex; align-items: center;">
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
                         <div class="form-floating mb-3" style="width: 30%;">
                             <input class="form-control" type="number" placeholder="Duration"
                                    formControlName="duration"

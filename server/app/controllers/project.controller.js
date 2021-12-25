@@ -3,7 +3,7 @@ const Project = db.project;
 const Op = db.Sequelize.Op;
 
 exports.create = (req, res) => {
-  if (!req.body.title) {
+  if (!req.body.projectName) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
@@ -11,7 +11,7 @@ exports.create = (req, res) => {
   }
   
   const project = {
-    id: req.params.id,
+    id: req.body.id,
     projectName: req.body.projectName,
     description: req.body.description,
     status: req.body.status
@@ -66,8 +66,7 @@ exports.findOne = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  const id = req.params.id;
-  
+  const id = req.body.id;
   Project.update(req.body, {
       where: {id: id}
     })

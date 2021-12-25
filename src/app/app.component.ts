@@ -7,47 +7,48 @@ import {Router} from '@angular/router';
 import {AuthenticationService} from './shared/services/authentication.service';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss']
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-    private subscription: Subscription;
-    messageText: string;
-    message: any;
-    currentUser: UserModel;
-
-    constructor(private alertService: AlertService,
-                private toastr: ToastrService,
-                private router: Router,
-                private authenticationService: AuthenticationService) {
-        this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
-    }
-
-    ngOnInit() {
-        this.subscription = this.alertService.getAlert()
-            .subscribe(message => {
-                switch (message && message.type) {
-                    case 'success':
-                        message.cssClass = 'alert alert-success';
-                        this.toastr.success(message.text);
-                        break;
-                    case 'error':
-                        message.cssClass = 'alert alert-danger';
-                        this.messageText = typeof (message.text) == 'string' ? message.text : message.text.error.message;
-                        this.toastr.error(this.messageText);
-                        break;
-                }
-                this.message = message;
-            });
-    }
-
-    logout() {
-        this.authenticationService.logout();
-        this.router.navigate(['/login']);
-    }
-
-    ngOnDestroy() {
-        this.subscription.unsubscribe();
-    }
+  
+  private subscription: Subscription;
+  messageText: string;
+  message: any;
+  currentUser: UserModel;
+  
+  constructor(private alertService: AlertService,
+              private toastr: ToastrService,
+              private router: Router,
+              private authenticationService: AuthenticationService) {
+    this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
+  }
+  
+  ngOnInit() {
+    this.subscription = this.alertService.getAlert()
+      .subscribe(message => {
+        switch (message && message.type) {
+          case 'success':
+            message.cssClass = 'alert alert-success';
+            this.toastr.success(message.text);
+            break;
+          case 'error':
+            message.cssClass = 'alert alert-danger';
+            this.messageText = typeof (message.text) == 'string' ? message.text : message.text.error.message;
+            this.toastr.error(this.messageText);
+            break;
+        }
+        this.message = message;
+      });
+  }
+  
+  logout() {
+    this.authenticationService.logout();
+    this.router.navigate(['/login']);
+  }
+  
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 }

@@ -1,26 +1,29 @@
 <div class="box circle" (click)="addProject(content)">
-  <span class="tooltiptext">Add new task</span>
+  <span class="tooltiptext">Add new project</span>
   <p class="add">&#65291;</p>
 </div>
 
-<!--<div class="background"></div>-->
-<!--<div class="background background2"></div>-->
-<div *ngFor="let  project of  projects">
-  <div class="container" (dblclick)="updateProject(content, $event)">
-    <div class="card">
-      <div class="card-header px-lg-5">
-        <p style="float: right; margin: 0;">{{ project.status}}</p>
-      </div>
-      <div class="card-body">
-        <h3>{{ project.projectName}}</h3>
-        <p class="text-muted text-sm">
-          {{ project.description}}
-        </p>
+<img src="./assets/images/Scenes05.svg" alt="" class="scene5">
+<div class="projects-wrapper">
+  <div *ngFor="let  project of  projects; let idx = index">
+    <div class="container" (dblclick)="updateProject(content, project)">
+      <div class="card" [ngStyle]="{'margin': idx < 1 ? '0' : '0 auto'}">
+        <div class="card-header px-lg-5">
+          <p style="float: right; margin: 0;">{{project.status}}</p>
+        </div>
+        <div class="card-body">
+          <h3>{{ project.projectName}}</h3>
+          <p class="text-muted text-sm">
+            {{ project.description}}
+          </p>
+        </div>
+        <a [routerLink]="['/board', {'paramKey': project.id}]" class="btn corner" [ngStyle]="linkStyle(project)">
+          go to the task list
+        </a>
       </div>
     </div>
   </div>
 </div>
-<!--<img src="./assets/images/Scenes04.svg" alt="" class="character2">-->
 
 <ng-template #content let-modal>
   <div class="container">
@@ -49,7 +52,7 @@
                         <textarea class="form-control" style="padding-top: 0.5rem;" cols="2" rows="5"
                                   formControlName="description" placeholder="Description"></textarea>
           </div>
-          <div class="form-floating right-field">
+          <div class="form-floating right-field" style="margin-left: 0 !important;">
             <ng-select2 formControlName="status" [width]="'100%'" [data]="statusData">
             </ng-select2>
           </div>

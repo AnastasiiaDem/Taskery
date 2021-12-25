@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit} from '@angular/core';
 import {ProjectModel} from '../shared/models/project.model';
 import {ProjectsService} from '../shared/services/project.service';
 import {StatusEnum} from '../shared/enums';
@@ -6,6 +6,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Select2OptionData} from 'ng-select2';
 import {TaskService} from '../shared/services/task.service';
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-projects',
@@ -25,10 +26,26 @@ export class ProjectsComponent implements OnInit {
     return this.projectForm.controls;
   }
   
+  linkStyle(project) {
+    if (project.status == StatusEnum.todo) {
+      return {'background': '#EDF9FF'};
+    }
+    if (project.status == StatusEnum.inProgress) {
+      return {'background': '#FFEFEA'};
+    }
+    if (project.status == StatusEnum.onReview) {
+      return {'background': '#EAE8FF'};
+    }
+    if (project.status == StatusEnum.done) {
+      return {'background': '#E8FBED'};
+    }
+  }
+  
   constructor(private formBuilder: FormBuilder,
               private modalService: NgbModal,
               private taskService: TaskService,
-              private projectService: ProjectsService) {
+              private projectService: ProjectsService,
+              private elementRef: ElementRef) {
   }
   
   ngOnInit() {
@@ -48,17 +65,35 @@ export class ProjectsComponent implements OnInit {
     });
   }
   
+  ngAfterViewChecked() {
+    const dom: HTMLElement = this.elementRef.nativeElement;
+    
+    dom.querySelectorAll('.card-header').forEach(el => {
+      if (el.innerHTML.includes(StatusEnum.todo)) {
+        $(el).css({'color': 'rgb(57 197 255)'});
+      }
+      if (el.innerHTML.includes(StatusEnum.inProgress)) {
+        $(el).css({'color': 'rgb(255 149 119)'});
+      }
+      if (el.innerHTML.includes(StatusEnum.onReview)) {
+        $(el).css({'color': 'rgb(101 85 255)'});
+      }
+      if (el.innerHTML.includes(StatusEnum.done)) {
+        $(el).css({'color': 'rgb(58 224 104)'});
+      }
+      $(el).css({'font-weight': '600'});
+    });
+  }
+  
   getAllProjects() {
     this.projectService.getProjects()
       .subscribe(projects => {
           this.projects = projects;
-          debugger
           this.currentProject = {
             id: this.projects.length + 1,
             projectName: '',
             description: '',
-            status: StatusEnum.todo,
-            taskId: []
+            status: StatusEnum.todo
           };
         },
         err => {
@@ -69,14 +104,17 @@ export class ProjectsComponent implements OnInit {
   getAllTasks() {
     this.taskService.getTasks()
       .subscribe(tasks => {
-          this.projects = tasks;
-          debugger
+          this.tasksData = tasks.map(task => {
+            return {
+              id: task.id,
+              text: task.title
+            };
+          });
           this.currentProject = {
             id: this.projects.length + 1,
             projectName: '',
             description: '',
-            status: StatusEnum.todo,
-            taskId: []
+            status: StatusEnum.todo
           };
         },
         err => {
@@ -85,17 +123,25 @@ export class ProjectsComponent implements OnInit {
   }
   
   addProject(content) {
-    let currentTask = {
-      id: this.projects.length ? Math.max(...this.projects.map(x => x.id)) + 1 : 1,
-      title: '',
+    let currentProject = {
+      id: this.projects.length + 1,
+      projectName: '',
       description: '',
-      status: StatusEnum.todo,
-      duration: 0,
-      employeeId: 1
+      status: StatusEnum.todo
     };
-    this.projectForm.setValue(currentTask);
+    this.projectForm.setValue(currentProject);
     this.addTaskFlag = true;
     this.modalService.open(content, {centered: true});
+  }
+  
+  showUpdatedItem(project) {
+    let updateItem = this.projects.find(this.findIndexToUpdate, project.id);
+    let index = this.projects.indexOf(updateItem);
+    this.projects[index] = project;
+  }
+  
+  findIndexToUpdate(project) {
+    return project.id === this;
   }
   
   onSubmit(modal) {
@@ -103,6 +149,7 @@ export class ProjectsComponent implements OnInit {
       this.projectService.updateProject(this.projectForm.value)
         .subscribe(data => {
             console.log(data.message);
+            this.showUpdatedItem(this.projectForm.value);
           },
           err => {
             console.log(err);
@@ -120,31 +167,27 @@ export class ProjectsComponent implements OnInit {
   }
   
   updateProject(content, task) {
-    debugger
     this.addTaskFlag = false;
-    this.projectForm.setValue(task.data);
+    this.projectForm.setValue(task);
     this.modalService.open(content, {centered: true});
   }
   
   deleteProject(modal) {
     this.projectService.deleteProject(this.projectForm.value.id)
       .subscribe(data => {
+          this.projects = this.projects.filter(task => task.id !== this.projectForm.value.id);
           console.log(data.message);
-          this.projects.filter(task => task.id !== this.projectForm.value.id);
+          let currentTask = {
+            id: this.projects.length + 1,
+            projectName: '',
+            description: '',
+            status: StatusEnum.todo
+          };
+          this.projectForm.setValue(currentTask);
+          modal.close();
         },
         err => {
           console.log(err);
         });
-    
-    let currentTask = {
-      id: this.projects.length ? Math.max(...this.projects.map(x => x.id)) + 1 : 1,
-      title: '',
-      description: '',
-      status: StatusEnum.todo,
-      duration: 0,
-      employeeId: 1
-    };
-    this.projectForm.setValue(currentTask);
-    modal.close();
   }
 }

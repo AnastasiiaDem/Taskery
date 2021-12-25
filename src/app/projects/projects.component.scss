@@ -83,7 +83,8 @@
   border: none;
   box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
   border-radius: 1rem;
-  margin-bottom: 0.5rem !important;
+  margin-bottom: 2rem !important;
+  width: 60%;
 }
 
 .bg-gray-100 {
@@ -189,12 +190,15 @@ a {
 }
 
 .card-header {
-  padding: 1rem 2rem;
+  padding: 0.6rem 2em;
 }
 
 .close-button {
   width: 100%;
   border-radius: 0 0 0.25rem 0.25rem;
+  position: absolute;
+  left: 0;
+  bottom: 0;
 }
 
 .tooltiptext {
@@ -209,7 +213,7 @@ a {
   position: absolute;
   z-index: 1;
   top: -2.5rem;
-  left: -0.8rem;
+  left: -1.31rem;
   font-size: 0.7rem;
   transition: visibility 1s cubic-bezier(0.76, -0.37, 0.15, 1.23);
 }
@@ -241,14 +245,70 @@ a {
 
 .card-content {
   padding: 0.5rem;
+
   p {
     font-size: 1rem;
     line-height: 1rem;
     margin-bottom: 0.5rem;
   }
+
   div {
     max-height: 50px;
     line-height: 1rem;
     word-break: break-word;
+  }
+}
+
+.text-muted {
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  display: -webkit-box;
+  word-wrap: break-word;
+  -webkit-box-orient: vertical;
+  margin-bottom: 0;
+}
+
+.scene5 {
+  position: absolute;
+  left: 62%;
+  top: 22%;
+  width: 400px;
+  transform: scale(1.4);
+  z-index: -1;
+}
+
+
+.background {
+  filter: blur(30px);
+  width: 400px;
+  z-index: -1;
+  height: 400px;
+  position: absolute;
+  border-radius: 72%;
+  left: 5%;
+  top: 14%;
+  background: linear-gradient(322deg, white 40%, #ece9ff 50%);
+}
+
+.background2 {
+  top: 100%;
+  left: 60%;
+  width: 200px;
+  height: 200px;
+  background: #eae6ff;
+  filter: blur(30px);
+}
+
+.corner {
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  font-size: 0.7rem;
+  padding: 3px;
+  text-decoration: none !important;
+  color: #6a779a !important;
+  transition: all .5s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
   }
 }

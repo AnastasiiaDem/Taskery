@@ -5,8 +5,8 @@ export enum PositionEnum {
 }
 
 export enum StatusEnum {
-    'todo' = 'todo',
-    'inProgress' = 'in progress',
-    'onReview' = 'on review',
-    'done' = 'done'
+    'todo' = 'To Do',
+    'inProgress' = 'In Progress',
+    'onReview' = 'On Review',
+    'done' = 'Done'
 }
