@@ -8,6 +8,7 @@ import {AlertService} from '../../shared/services/alert.service';
 import {UserModel} from 'src/app/shared/models/user.model';
 import {PositionEnum} from '../../shared/enums';
 import {Select2OptionData} from 'ng-select2';
+import {Subject, takeUntil} from 'rxjs';
 
 @Component({
     selector: 'app-register',
@@ -20,6 +21,7 @@ export class RegisterComponent implements OnInit {
     submitted = false;
     userList: UserModel[] = [];
     positionData: Array<Select2OptionData> = [];
+    private readonly unsubscribe: Subject<void> = new Subject();
 
     constructor(private formBuilder: FormBuilder,
                 private router: Router,
@@ -46,6 +48,11 @@ export class RegisterComponent implements OnInit {
             agree: ['', Validators.required]
         });
     }
+    
+    ngOnDestroy() {
+        this.unsubscribe.next();
+        this.unsubscribe.complete();
+    }
 
     get f() {
         return this.registerForm.controls;
@@ -60,7 +67,11 @@ export class RegisterComponent implements OnInit {
             return;
         }
 
-        this.userService.getUsers().subscribe(users => {
+        this.userService.getUsers()
+          .pipe(
+            takeUntil(this.unsubscribe)
+          )
+          .subscribe(users => {
             this.userList = users;
         });
 
@@ -75,8 +86,11 @@ export class RegisterComponent implements OnInit {
 
         this.loading = true;
         this.userService.addUser(userObject)
-            .pipe(first())
-            .subscribe(
+          .pipe(
+            takeUntil(this.unsubscribe),
+            first()
+          )
+          .subscribe(
                 data => {
                     this.alertService.success('Registration successful', true);
                     this.router.navigate(['/login']);

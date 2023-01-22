@@ -134,7 +134,17 @@ ng-select2 {
   overflow: scroll !important;
 }
 
+.e-kanban .e-kanban-table.e-content-table .e-card.e-selection {
+  background-color: #fff !important;
+}
 
+.e-kanban .e-kanban-content .e-content-row .e-content-cells .e-card-wrapper .e-card {
+  border-radius: 10px !important;
+}
+
+.e-accordion .e-acrdn-item.e-select.e-selected.e-expand-state > .e-acrdn-header .e-acrdn-header-icon, .e-accordion .e-acrdn-item.e-select.e-selected.e-expand-state > .e-acrdn-header .e-acrdn-header-content, .e-accordion .e-acrdn-item.e-select.e-expand-state > .e-acrdn-header .e-acrdn-header-icon, .e-accordion .e-acrdn-item.e-select.e-expand-state > .e-acrdn-header .e-acrdn-header-content {
+  color: #1172fd;
+}
 
 @import '../node_modules/@syncfusion/ej2-base/styles/material.css';
 @import '../node_modules/@syncfusion/ej2-buttons/styles/material.css';

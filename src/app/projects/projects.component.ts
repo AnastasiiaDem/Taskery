@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, OnInit} from '@angular/core';
 import {ProjectModel} from '../shared/models/project.model';
 import {ProjectsService} from '../shared/services/project.service';
 import {StatusEnum} from '../shared/enums';
@@ -7,13 +7,14 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Select2OptionData} from 'ng-select2';
 import {TaskService} from '../shared/services/task.service';
 import * as $ from 'jquery';
+import {Subject, takeUntil} from 'rxjs';
 
 @Component({
   selector: 'app-projects',
   templateUrl: './projects.component.html',
   styleUrls: ['./projects.component.scss']
 })
-export class ProjectsComponent implements OnInit {
+export class ProjectsComponent implements OnInit, AfterViewChecked {
   
   projects: ProjectModel[] = [];
   currentProject: ProjectModel;
@@ -21,6 +22,7 @@ export class ProjectsComponent implements OnInit {
   statusData: Array<Select2OptionData> = [];
   tasksData: Array<Select2OptionData> = [];
   addTaskFlag: boolean;
+  private readonly unsubscribe: Subject<void> = new Subject();
   
   get f() {
     return this.projectForm.controls;
@@ -85,8 +87,14 @@ export class ProjectsComponent implements OnInit {
     });
   }
   
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+  }
+  
   getAllProjects() {
     this.projectService.getProjects()
+      .pipe(takeUntil(this.unsubscribe))
       .subscribe(projects => {
           this.projects = projects;
           this.currentProject = {
@@ -103,6 +111,7 @@ export class ProjectsComponent implements OnInit {
   
   getAllTasks() {
     this.taskService.getTasks()
+      .pipe(takeUntil(this.unsubscribe))
       .subscribe(tasks => {
           this.tasksData = tasks.map(task => {
             return {
@@ -147,6 +156,7 @@ export class ProjectsComponent implements OnInit {
   onSubmit(modal) {
     if (!this.addTaskFlag) {
       this.projectService.updateProject(this.projectForm.value)
+        .pipe(takeUntil(this.unsubscribe))
         .subscribe(data => {
             console.log(data.message);
             this.showUpdatedItem(this.projectForm.value);
@@ -156,6 +166,7 @@ export class ProjectsComponent implements OnInit {
           });
     } else {
       this.projectService.addProject(this.projectForm.value)
+        .pipe(takeUntil(this.unsubscribe))
         .subscribe(task => {
             this.projects.push(task);
           },
@@ -174,6 +185,7 @@ export class ProjectsComponent implements OnInit {
   
   deleteProject(modal) {
     this.projectService.deleteProject(this.projectForm.value.id)
+      .pipe(takeUntil(this.unsubscribe))
       .subscribe(data => {
           this.projects = this.projects.filter(task => task.id !== this.projectForm.value.id);
           console.log(data.message);

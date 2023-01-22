@@ -16,7 +16,6 @@ export class TaskService {
     }
 
     addTask(body: TaskModel): Observable<any> {
-        debugger
         return this.http.post(this.taskUrl, body);
     }
 

@@ -1,14 +1,17 @@
 ﻿import {Injectable} from '@angular/core';
 import {NavigationStart, Router} from '@angular/router';
-import {Observable, Subject} from 'rxjs';
+import {Observable, Subject, takeUntil} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class AlertService {
     private subject = new Subject<any>();
     private keepAfterRouteChange = false;
+    private readonly unsubscribe: Subject<void> = new Subject();
 
     constructor(private router: Router) {
-        this.router.events.subscribe(event => {
+        this.router.events
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe(event => {
             if (event instanceof NavigationStart) {
                 if (this.keepAfterRouteChange) {
                     this.keepAfterRouteChange = false;
@@ -17,6 +20,11 @@ export class AlertService {
                 }
             }
         });
+    }
+    
+    ngOnDestroy() {
+        this.unsubscribe.next();
+        this.unsubscribe.complete();
     }
 
     getAlert(): Observable<any> {

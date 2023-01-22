@@ -6,13 +6,15 @@ import {LoginComponent} from './auth/login/login.component';
 import {AuthGuard} from './shared/services/auth.guard';
 import { HomeComponent } from './home/home.component';
 import { ProjectsComponent } from './projects/projects.component';
+import { ReportComponent } from './report/report.component';
 
 const routes: Routes = [
     {path: '', component: HomeComponent, canActivate: [AuthGuard]},
-    {path: 'login', component: LoginComponent},
-    {path: 'register', component: RegisterComponent},
-    {path: 'board', component: BoardComponent},
-    {path: 'projects', component: ProjectsComponent},
+    {path: 'login', component: LoginComponent, data: { animation: 'login' }},
+    {path: 'register', component: RegisterComponent, data: { animation: 'register' }},
+    {path: 'board', component: BoardComponent, data: { animation: 'board' }},
+    {path: 'projects', component: ProjectsComponent, data: { animation: 'projects' }},
+    {path: 'report', component: ReportComponent, data: { animation: 'report' }}
 ];
 
 @NgModule({

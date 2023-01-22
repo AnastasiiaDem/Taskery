@@ -6,14 +6,14 @@
     <div style="display: flex; margin-right: 5rem;">
       <a class="nav-item nav-link project-list" routerLink="/">Home</a>
       <a class="nav-item nav-link project-list" routerLink="/projects">Project list</a>
-      <a class="nav-item nav-link report" routerLink="/">Report</a>
+      <a class="nav-item nav-link report" routerLink="/report">Report</a>
     </div>
     <a class="nav-item nav-link" (click)="logout()">
       Logout <img src="./assets/images/icons8-all-out-96.png" alt="" style="width: 13px; padding-bottom: 1.5px">
     </a>
   </div>
 </nav>
-<div class="main-body-contents">
+<div class="main-body-contents w3-animate-opacity">
   <router-outlet></router-outlet>
 </div>
 <footer class="footer" [ngStyle]="{'display': currentUser ? 'block' : 'none'}">

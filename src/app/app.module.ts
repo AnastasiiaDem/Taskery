@@ -18,44 +18,63 @@ import {AlertService} from './shared/services/alert.service';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {KanbanModule} from '@syncfusion/ej2-angular-kanban';
 import {NgSelect2Module} from 'ng-select2';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatListModule} from '@angular/material/list';
-import { HomeComponent } from './home/home.component';
-import { ProjectsComponent } from './projects/projects.component';
+import {HomeComponent} from './home/home.component';
+import {ProjectsComponent} from './projects/projects.component';
 import {ProjectsService} from './shared/services/project.service';
+import {ReportComponent} from './report/report.component';
+import {NgChartsModule} from 'ng2-charts';
+import {
+  AccumulationAnnotationService,
+  AccumulationChartModule, AccumulationDataLabelService,
+  AccumulationLegendService,
+  AccumulationTooltipService,
+  PieSeriesService
+} from '@syncfusion/ej2-angular-charts';
+import {AccordionModule} from '@syncfusion/ej2-angular-navigations';
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        LoginComponent,
-        RegisterComponent,
-        BoardComponent,
-        HomeComponent,
-        ProjectsComponent
-    ],
-    imports: [
-        BrowserModule,
-        CommonModule,
-        FormsModule,
-        HttpClientModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        ReactiveFormsModule,
-        ToastrModule.forRoot(),
-        DragDropModule,
-        KanbanModule,
-        NgSelect2Module,
-        NgbModule,
-        MatButtonModule,
-        MatListModule,
-        MatIconModule
-    ],
-    providers: [HttpClientModule, TaskService, UserService, ProjectsService, AlertService, AuthenticationService,
-        {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}
-    ],
-    bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    RegisterComponent,
+    BoardComponent,
+    HomeComponent,
+    ProjectsComponent,
+    ReportComponent
+  ],
+  imports: [
+    BrowserModule,
+    CommonModule,
+    FormsModule,
+    HttpClientModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    ReactiveFormsModule,
+    ToastrModule.forRoot(),
+    DragDropModule,
+    KanbanModule,
+    NgSelect2Module,
+    NgbModule,
+    MatButtonModule,
+    MatListModule,
+    MatIconModule,
+    NgChartsModule,
+    AccumulationChartModule,
+    AccordionModule
+  ],
+  providers: [HttpClientModule, TaskService, UserService, ProjectsService, AlertService, AuthenticationService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi: true
+    }, PieSeriesService, AccumulationLegendService, AccumulationTooltipService, AccumulationDataLabelService,
+    AccumulationAnnotationService
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {
 }

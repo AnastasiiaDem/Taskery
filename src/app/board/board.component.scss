@@ -181,7 +181,7 @@ a {
 .add {
   height: 100%;
   display: flex;
-  padding: 8px 11px 11px;
+  padding: 9px 11px 11px;
   align-items: center;
   justify-content: center;
   transform: scale(1.8);
@@ -244,14 +244,32 @@ a {
 
 .card-content {
   padding: 0.5rem;
+
   p {
     font-size: 1rem;
     line-height: 1rem;
     margin-bottom: 0.5rem;
   }
+
   div {
     max-height: 50px;
     line-height: 1rem;
     word-break: break-word;
   }
+}
+
+.CardHeader {
+  background: #fff !important;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.CardBody {
+  background: #fff !important;
+  overflow: hidden;
+  -webkit-line-clamp: 6;
+  display: -webkit-box;
+  word-wrap: break-word;
+  -webkit-box-orient: vertical;
+  margin-bottom: 0;
 }
